@@ -6,6 +6,9 @@ class DashboardPage {
 
     this.cart = page.locator("[routerlink='/dashboard/cart']");
     this.orders = page.locator("[routerlink='/dashboard/myorders']");
+    this.searchTextBox = page.locator(
+      'input[placeholder="Search"]'   
+    );
   }
 
   async searchProductAddCart(productName) {
@@ -31,6 +34,12 @@ class DashboardPage {
     await this.orders.waitFor({ state: 'visible', timeout: 10000 });
     await this.orders.click();
   }
+
+  async verifyLeftPanelOptions() {
+  await expect(this.searchTextBox).toBeVisible();
+  //await expect(this.sortRadioButton).toBeVisible();
+  //await expect(this.inStockCheckbox).toBeVisible();
+}
 }
 
 module.exports = { DashboardPage };
