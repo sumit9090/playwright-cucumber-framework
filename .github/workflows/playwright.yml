@@ -1,0 +1,54 @@
+name: Playwright Cucumber Tests
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  test:
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - uses: actions/setup-node@v4
+      with:
+        node-version: lts/*
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Install Playwright Browsers
+      run: npx playwright install --with-deps
+
+    - name: Run Cucumber tests
+      run: npx cucumber-js
+      env:
+        TEST_ENV: qa
+        BROWSER: chromium
+        HEADLESS: true
+        VIDEO: true
+
+    - name: Generate Allure report
+      run: npx allure generate allure-results --clean -o allure-report
+
+    - uses: actions/upload-artifact@v4
+      with:
+        name: allure-report
+        path: allure-report/
+        retention-days: 30
+
+    - uses: actions/upload-artifact@v4
+      with:
+        name: videos
+        path: videos/
+        retention-days: 30
+
+    - uses: actions/upload-artifact@v4
+      with:
+        name: screenshots
+        path: screenshots/
+        retention-days: 30
