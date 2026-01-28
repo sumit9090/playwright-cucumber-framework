@@ -1,30 +1,40 @@
 const { Given, When, Then } = require('@cucumber/cucumber');
 const { POManager } = require('../../pageObjects/POManager');
+const users = require('../../test-data/user details.json');//adding json file
 const { setDefaultTimeout } = require('@cucumber/cucumber');//this will help us to view the actions
 setDefaultTimeout(30 * 1000); // 30 seconds
 ////this will help us to view the actions
-Given(
-  'a login to ecommerce application with {string} and {string}',
-  async function (username, password) {
 
-    // 🔑 page now comes from World
+
+Given('user logs in as {string}', async function (userType) {
+
+    const user = users[userType];
+
+    if (!user) {
+      throw new Error(`User data not found: ${userType}`);
+    }
+
+    // 🔑 page comes from World
     this.poManager = new POManager(this.page);
     const loginPage = this.poManager.getLoginPage();
 
     await loginPage.goTo();
-   
 
-    // Attach to report (if attach is available)
     if (this.attach) {
-      await this.attach(`Opened URL: ${process.env.BASE_URL}`);
-    }
-    await loginPage.validLogin(username, password);
-    await this.attach(`Attempting login with:\nUsername: ${username}\nPassword: ********`);
+      await this.attach(`Opened URL: ${process.env.BASE_URL}`, 'text/plain');
 
- }
+      
+      await this.attach(
+        `Attempting login with:\nUsername: ${user.email}\nPassword: ********`,
+        'text/plain'
+      );
+    }
+
+    await loginPage.validLogin(user.email, user.password);
+  }
 );
 
-When('Add {string} to the cart', async function (productName) {
+When('user adds {string} to the cart', async function (productName) {
   const dashboardPage = this.poManager.getDashboardPage();
 
 try {
@@ -44,20 +54,21 @@ try {
 
 );
 
-Then('user should see left panel options', async function () {
-  try {
-    const dashboardPage = this.poManager.getDashboardPage();
-    await dashboardPage.verifyLeftPanelOptions();
-  } catch (error) {
-    if (this.attach) {
-      // Attach as plain text
-      await this.attach('❌ Left panel options are missing', 'text/plain');
+//steps can be written in multiple step files because it is defined in cucumber.js file
+ Then('user should see left panel options', async function () {
+   try {
+     const dashboardPage = this.poManager.getDashboardPage();
+     await dashboardPage.verifyLeftPanelOptions();
+   } catch (error) {
+     if (this.attach) {
+       // Attach as plain text
+       await this.attach('❌ Left panel options are missing', 'text/plain');
     }
-    throw error; // important to fail the test
-  }
-});
+     throw error; // important to fail the test
+   }
+ });
 
-Then('Verify {string} is displayed in the cart', async function (productName) {
+Then('{string} should be displayed in the cart', async function (productName) {
   const cartPage = this.poManager.getCartPage();
 
 try {
