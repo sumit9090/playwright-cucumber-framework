@@ -40,7 +40,21 @@ try {
     // Important: re-throw to fail the step
     throw error;
   }
+}
 
+);
+
+Then('user should see left panel options', async function () {
+  try {
+    const dashboardPage = this.poManager.getDashboardPage();
+    await dashboardPage.verifyLeftPanelOptions();
+  } catch (error) {
+    if (this.attach) {
+      // Attach as plain text
+      await this.attach('❌ Left panel options are missing', 'text/plain');
+    }
+    throw error; // important to fail the test
+  }
 });
 
 Then('Verify {string} is displayed in the cart', async function (productName) {
@@ -58,21 +72,9 @@ try {
     // Important: re-throw to fail the step
     throw error;
   }
+
 //npx cucumber-js --dry-run --format progress ----this command is used to check the mapping of feature file and step definition file
 //also for 1-2 steps do not create new step definition file 
-
-
-Then('user should see left panel options', async function () {
-  try {
-    const dashboardPage = this.poManager.getDashboardPage();
-    await dashboardPage.verifyLeftPanelOptions();
-  } catch (error) {
-    if (this.attach) {
-      // Attach as plain text
-      await this.attach('❌ Left panel options are missing', 'text/plain');
-    }
-    throw error; // important to fail the test
-  }
 });
 
 //how to handle flakiness in playwright with cucumber
