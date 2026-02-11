@@ -1,0 +1,2 @@
+✅ Navigated to product:
+productName: ZARA COAT 3

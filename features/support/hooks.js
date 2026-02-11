@@ -1,5 +1,5 @@
 const { Before, After } = require('@cucumber/cucumber');
-const fs = require('fs');
+const fs = require('fs'); //It’s a built-in Node.js module . It lets your code read, write, create, delete files & folders
 
 Before(async function () {
   await this.init();

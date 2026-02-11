@@ -1,14 +1,10 @@
+Feature: Verifying the left panel options in ecommerce application
 
-
-
-     Feature: Verifying the left panel options in ecommerce application
-#npx cucumber-js --tags "@smoke"
-   @sanity
-   Scenario Outline: Verifying the left panel options
+  @smoke
+  Scenario Outline: Verifying the left panel options
     Given a login to ecommerce application with "<email>" and "<password>"
     Then user should see left panel options
 
-   Examples:
-     | email                    | password |
-     | sumit.kalra121@gmail.com | Pass@123 |
-     
+    Examples:
+      | email                    | password |
+      | sumit.kalra121@gmail.com | Pass@123 |

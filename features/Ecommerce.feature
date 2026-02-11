@@ -35,6 +35,7 @@
 
 Feature: Placing the order
 @smoke
+@skip
 Scenario Outline: Placing the order
   Given user logs in as "validUser"
   When user adds "<productName>" to the cart

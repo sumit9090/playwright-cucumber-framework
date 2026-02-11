@@ -16,7 +16,11 @@ Given('user logs in as {string}', async function (userType) {
 
     // 🔑 page comes from World
     this.poManager = new POManager(this.page);
+    //Loose coupling
+    // Easy maintenance
+
     const loginPage = this.poManager.getLoginPage();
+    //abstraction + composition
 
     await loginPage.goTo();
 
@@ -258,3 +262,7 @@ try {
 // 🔟 Timeouts – Set them explicitly
 // page.setDefaultTimeout(30000);
 // page.setDefaultNavigationTimeout(30000);
+
+
+
+//“In our BDD Playwright framework, we didn’t use a traditional BaseClass. Instead, we used Cucumber World for dependency injection, Hooks for lifecycle management, and a POManager for page abstraction. This avoids inheritance complexity and follows composition over inheritance.”

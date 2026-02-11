@@ -82,8 +82,22 @@ const { setWorldConstructor } = require('@cucumber/cucumber');
 const { chromium, firefox, webkit } = require('playwright');
 
 // Load env
-const env = process.env.TEST_ENV || 'qa';
+const env = process.env.TEST_ENV || 'staging';
+//“If the OS has a variable called TEST_ENV, use it. Otherwise, default to 'staging'."
+
+
+
 require('dotenv').config({ path: `.env.${env}` });
+//dotenv.config() → copies .env → process.env
+//This line:
+
+//Reads .env.qa. Tries to add variables into process.env. BUT only if they don’t already exist
+
+console.log('TEST_ENV =', process.env.TEST_ENV);// checking value of TEST_ENV
+
+console.log('BROWSER =', process.env.BROWSER);
+
+console.log('HEADLESS =', process.env.HEADLESS);
 
 class CustomWorld {
   constructor({ attach, parameters }) {
@@ -92,8 +106,9 @@ class CustomWorld {
   }
 
   async init() {
-    const browserName = process.env.BROWSER || 'chromium';
+    const browserName = process.env.BROWSER || 'chromium';// // <-- uses your .env value
     const headless = process.env.HEADLESS === 'true';
+    //“Set headless to true ONLY IF process.env.HEADLESS is the string 'true'.”
 
     const browsers = { chromium, firefox, webkit };
     if (!browsers[browserName]) {
@@ -106,6 +121,13 @@ class CustomWorld {
       slowMo: Number(process.env.SLOW_MO) || 0,
       ...(browserName === 'chromium' && { channel: 'chrome' })
     });
+    //Key point
+
+// browser, context, and page are NOT created in the constructor
+
+// They are created only when init() is called
+
+// 👉 That is lazy initialization
 
     // 🎥 ONE context with video enabled
     this.context = await this.browser.newContext({
@@ -124,4 +146,22 @@ class CustomWorld {
   }
 }
 
-setWorldConstructor(CustomWorld);
+setWorldConstructor(CustomWorld);//“ it means For every scenario, create an instance of CustomWorld and use it as this inside steps and hooks.”
+
+// Why CustomWorld is the right place
+
+// CustomWorld is:
+
+// Created once per scenario
+
+// Destroyed after scenario ends
+
+// Perfect place for:
+
+// browser
+
+// context
+
+// page
+
+// test-specific data

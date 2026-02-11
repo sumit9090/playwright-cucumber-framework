@@ -1,0 +1,5 @@
+❌ Failed to navigate to product:
+productName: Automation 8
+Error: locator.waitFor: Timeout 10000ms exceeded.
+Call log:
+[2m  - waiting for locator('.cartSection').first() to be visible[22m
