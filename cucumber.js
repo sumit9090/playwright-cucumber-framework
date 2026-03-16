@@ -1,97 +1,113 @@
-const { timestamp } = require('./utils/timestamp');
+ const { timestamp } = require('./utils/timestamp');
 
-module.exports = {
-  default: {
+
+// //We use module.exports to export configuration from a file so that Cucumber can read and use it.
+// //This file (cucumber.js) is not just a script — it acts like a configuration provider.
+ module.exports = {
+   default: {
     require: [
-      'features/support/**/*.js',
-      'features/step_definitions/**/*.js'
-    ],
+  'features/support/**/*.js',
+  'features/step_definitions/**/*.js'
+],
 
-    parallel: 4,
-    retry: 3, //// 👈 retry failed scenarios 3 times
-    retryTagFilter: '@retry',
 
-    //Retry only flaky tests (best practice)
+     //parallel: 4,
+     retry: 0, //// 👈 retry failed scenarios 3 times
+   //npx cucumber-js --retry 3
+     //retryTagFilter: '@retry',
 
-    // What retryTagFilter: '@retry' does
+//     //Retry only flaky tests (best practice)
 
-    // This controls which scenarios are allowed to retry, not which ones run.
+//     // What retryTagFilter: '@retry' does
 
-    // 👉 Among the already-running scenarios (@smoke ones):
+//     // This controls which scenarios are allowed to retry, not which ones run.
 
-    // Only scenarios "also tagged with" @retry will retry
+//     // 👉 Among the already-running scenarios (@smoke ones):
 
-    // Others will fail immediately (no retry)
+//     // Only scenarios "also tagged with" @retry will retry
 
-    // This prevents masking real bugs.
+//     // Others will fail immediately (no retry)
 
-    tags: '@smoke',
+//     // This prevents masking real bugs.
 
-    timeout: 60000, //publishQuiet: true is a Cucumber.js setting 👍timeout here is step timeout, not Playwright timeout.
+  tags: '@smoke',
+
+     timeout: 60000, //publishQuiet: true is a Cucumber.js setting 👍timeout here is step timeout, not Playwright timeout.
 
     publishQuiet: true, //It’s a small one, but it cleans up your test output nicely.
+     worldParameters: {
+      device: 'iPhone 11',
+      ignoreHTTPSErrors: true
+    },
 
-    format: [
-      'progress',
-      `html:reports/cucumber-report-${timestamp}.html`,
+     format: [
+       'progress',//progress shows a simple execution indicator in the terminal while tests run.
+       //.....F.......
 
-      // allure-cucumberjs → Cucumber formatter
+//1 scenario failed
+//9 scenarios passed
+       `html:reports/cucumber-report-${timestamp}.html`,
 
-      // allure-commandline → Generate & open report
+//       // allure-cucumberjs → Cucumber formatter
 
-      'allure-cucumberjs/reporter',
-      'rerun:@rerun.txt'
-      //npx cucumber-js @rerun.txt
+//       // allure-commandline → Generate & open report
+
+       'allure-cucumberjs/reporter',
+       'rerun:@rerun.txt'
+//       //npx cucumber-js @rerun.txt
     ],
 
     grepInvert: '@skip',
 
-    formatOptions: {
-      allureResults: `allure-results/${timestamp}`
-    }
-  }
-};
+     formatOptions: {
+       allureResults: `allure-results/${timestamp}`
+     }
+   }
+ };
 
-// Install required packages
-// npm install --save-dev allure-cucumberjs allure-commandline
+// // Install required packages
+// // npm install --save-dev allure-cucumberjs allure-commandline
 
-// allure-commandline → generates and opens reports
+// // allure-commandline → generates and opens reports
 
-// allure-cucumberjs/reporter → Cucumber formatter for Allure
+// // allure-cucumberjs/reporter → Cucumber formatter for Allure
 
-// “We used Cucumber.js mainly for BDD-style readability, execution control using tags, and rich reporting integration with Allure,
-//  while Playwright handled the browser automation.”
+// // “We used Cucumber.js mainly for BDD-style readability, execution control using tags, and rich reporting integration with Allure,
+// //  while Playwright handled the browser automation.”
 
-//2️⃣ Configure cucumber.js
+// //2️⃣ Configure cucumber.js
 
-// 3️⃣ Run BDD tests
-// npx cucumber-js
+// // 3️⃣ Run BDD tests
+// // npx cucumber-js
 
-// After execution, you’ll see:
+// // After execution, you’ll see:
 
-// allure-results/
-//   └── 20260203/
-//       ├── *.json
-//       ├── *.txt
-//       └── attachments
+// // allure-results/
+// //   └── 20260203/
+// //       ├── *.json
+// //       ├── *.txt
+// //       └── attachments
 
-// ✅ 4️⃣ Generate Allure report
+// // ✅ 4️⃣ Generate Allure report
 
-// ⚠️ Use the same results folder
+// // ⚠️ Use the same results folder
 
-// npx allure generate allure-results/20260203 -o allure-report --clean
+// // npx allure generate allure-results/20260203 -o allure-report --clean
 
-// ✅ 5️⃣ Open Allure report
-// npx allure open allure-report
+// // ✅ 5️⃣ Open Allure report
+// // npx allure open allure-report
 
-//Interview-ready explanation (use this verbatim)
+// //Interview-ready explanation (use this verbatim)
 
-//“In our BDD Playwright framework, we executed tests using Cucumber tags. 
-// We retried only flaky scenarios by combining retry with retryTagFilter, 
-// and we used the rerun formatter to re-execute failed scenarios. For reporting,
-//  we integrated Allure and HTML reports, and we enabled parallel execution using Cucumber workers with isolated Playwright browser contexts.”
+// //“In our BDD Playwright framework, we executed tests using Cucumber tags. 
+// // We retried only flaky scenarios by combining retry with retryTagFilter, 
+// // and we used the rerun formatter to re-execute failed scenarios. For reporting,
+// //  we integrated Allure and HTML reports, and we enabled parallel execution using Cucumber workers with isolated Playwright browser contexts.”
 
-//npx cucumber-js --format rerun:@rerun.txt
-//Then rerun:
+// //npx cucumber-js --format rerun:@rerun.txt
+// //Then rerun:
 
-//npx cucumber-js @rerun.txt
+// //npx cucumber-js @rerun.txt
+
+
+

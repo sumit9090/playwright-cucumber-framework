@@ -1,0 +1,4 @@
+❌ Failed to verify product: Automation 8
+Error: locator.waitFor: Timeout 10000ms exceeded.
+Call log:
+[2m  - waiting for locator('.cartSection').first() to be visible[22m

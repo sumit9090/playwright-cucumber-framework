@@ -1,0 +1,14 @@
+{
+  "superAdmin": {
+    "username": "sumit.kalra121@gmail.com",
+    "password": "Pass@123"
+  },
+  "admin": {
+    "username": "sumit.kalra121@gmail.com",
+    "password": "Pass@123"
+  },
+  "simpleUser": {
+   "username": "sumit.kalra121@gmail.com",
+    "password": "Pass@123"
+  }
+}

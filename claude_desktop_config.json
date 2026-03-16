@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "bdd-runner": {
+      "command": "node",
+      "args": ["bdd-mcp-server.js"]
+    }
+  }
+}

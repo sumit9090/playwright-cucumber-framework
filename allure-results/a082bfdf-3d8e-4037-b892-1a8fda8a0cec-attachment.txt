@@ -1,3 +1,0 @@
-❌ Failed to navigate to product:
-productName: ADIDAS ORIGINAL
-Error: locator.waitFor: Target page, context or browser has been closed

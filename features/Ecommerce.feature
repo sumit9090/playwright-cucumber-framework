@@ -34,7 +34,7 @@
 
 
 Feature: Placing the order
-@smoke
+@sanity
 @skip
 Scenario Outline: Placing the order
   Given user logs in as "validUser"

@@ -1,96 +1,55 @@
-const { Given, When, Then } = require('@cucumber/cucumber');
+const { Given, When, Then ,setDefaultTimeout} = require('@cucumber/cucumber');//this will help us to view the actions
 const { POManager } = require('../../pageObjects/POManager');
-const users = require('../../test-data/user details.json');//adding json file
-const { setDefaultTimeout } = require('@cucumber/cucumber');//this will help us to view the actions
+//const users = require('../../test-data/user details.json');//adding json file
+const users = require('../../test-data/role_based_user_details.json');
 setDefaultTimeout(30 * 1000); // 30 seconds
-////this will help us to view the actions
+
 
 
 Given('user logs in as {string}', async function (userType) {
+  this.poManager = new POManager(this.page);
+  const loginPage = this.poManager.getRoleBasedLogin();
 
-    const user = users[userType];
+  await loginPage.goTo();
 
-    if (!user) {
-      throw new Error(`User data not found: ${userType}`);
-    }
+  //const user = this.getUser(userType);
 
-    // 🔑 page comes from World
-    this.poManager = new POManager(this.page);
-    //Loose coupling
-    // Easy maintenance
-
-    const loginPage = this.poManager.getLoginPage();
-    //abstraction + composition
-
-    await loginPage.goTo();
-
-    if (this.attach) {
-      await this.attach(`Opened URL: ${process.env.BASE_URL}`, 'text/plain');
-
-      
-      await this.attach(
-        `Attempting login with:\nUsername: ${user.email}\nPassword: ********`,
-        'text/plain'
-      );
-    }
-
-    await loginPage.validLogin(user.email, user.password);
+  if (this.attach) {
+    await this.attach(`Opened URL: ${process.env.BASE_URL}`, 'text/plain');
+    await this.attach(`Attempting login with role: ${userType}`, 'text/plain');
   }
-);
+
+  await loginPage.loginAs(userType);
+});
 
 When('user adds {string} to the cart', async function (productName) {
   const dashboardPage = this.poManager.getDashboardPage();
 
-try {
+  try {
     await dashboardPage.searchProductAddCart(productName);
     await dashboardPage.navigateToCart();
-    
-    // ✅ Only attach if everything succeeded
-    await this.attach(`✅ Navigated to product:\nproductName: ${productName}`);
+    await this.attach(`✅ Navigated to product: ${productName}`);
   } catch (error) {
-    // ❌ Attach error log
-    await this.attach(`❌ Failed to navigate to product:\nproductName: ${productName}\nError: ${error.message}`);
-    
-    // Important: re-throw to fail the step
+    await this.attach(`❌ Failed to navigate to product: ${productName}\nError: ${error.message}`);
     throw error;
   }
-}
-
-);
-
-//steps can be written in multiple step files because it is defined in cucumber.js file
- Then('user should see left panel options', async function () {
-   try {
-     const dashboardPage = this.poManager.getDashboardPage();
-     await dashboardPage.verifyLeftPanelOptions();
-   } catch (error) {
-     if (this.attach) {
-       // Attach as plain text
-       await this.attach('❌ Left panel options are missing', 'text/plain');
-    }
-     throw error; // important to fail the test
-   }
- });
+});
 
 Then('{string} should be displayed in the cart', async function (productName) {
   const cartPage = this.poManager.getCartPage();
-
-try {
+  try {
     await cartPage.VerifyProductIsDisplayed(productName);
-    
-    // ✅ Only attach if everything succeeded
-    await this.attach(`✅ Navigated to product:\nproductName: ${productName}`);
+    await this.attach(`✅ Product displayed: ${productName}`);
   } catch (error) {
-    // ❌ Attach error log
-    await this.attach(`❌ Failed to navigate to product:\nproductName: ${productName}\nError: ${error.message}`);
-    
-    // Important: re-throw to fail the step
+    await this.attach(`❌ Failed to verify product: ${productName}\nError: ${error.message}`);
     throw error;
   }
+});
+
 
 //npx cucumber-js --dry-run --format progress ----this command is used to check the mapping of feature file and step definition file
 //also for 1-2 steps do not create new step definition file 
-});
+
 
 //how to handle flakiness in playwright with cucumber
 
@@ -266,3 +225,4 @@ try {
 
 
 //“In our BDD Playwright framework, we didn’t use a traditional BaseClass. Instead, we used Cucumber World for dependency injection, Hooks for lifecycle management, and a POManager for page abstraction. This avoids inheritance complexity and follows composition over inheritance.”
+

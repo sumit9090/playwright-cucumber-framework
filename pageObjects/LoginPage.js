@@ -22,3 +22,4 @@ class LoginPage {
 }
 
 module.exports = { LoginPage };
+//“I am exporting LoginPage from this file so other files can use it.”

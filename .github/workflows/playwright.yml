@@ -25,7 +25,7 @@ jobs:
       run: npx playwright install --with-deps
 
     - name: Run Cucumber tests
-      run: npx cucumber-js
+      run: npx cucumber-js --parallel 4
       env:
         TEST_ENV: qa
         BROWSER: chromium

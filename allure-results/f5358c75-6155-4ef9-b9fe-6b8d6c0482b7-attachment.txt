@@ -1,3 +1,0 @@
-Attempting login with:
-Username: sumit.kalra121@gmail.com
-Password: ********

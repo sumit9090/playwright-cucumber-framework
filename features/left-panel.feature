@@ -1,6 +1,6 @@
 Feature: Verifying the left panel options in ecommerce application
 
-  @smoke
+  @sanity
   Scenario Outline: Verifying the left panel options
     Given a login to ecommerce application with "<email>" and "<password>"
     Then user should see left panel options

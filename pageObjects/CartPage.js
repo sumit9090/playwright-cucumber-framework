@@ -12,7 +12,7 @@ this.orders = page.locator("[routerlink='/dashboard/myorders']");
 this.checkout = page.locator("text=Checkout");
 
 }
-
+ 
 async VerifyProductIsDisplayed(productName) {
     // wait until cart is visible
     await this.page.locator(".cartSection").first().waitFor({ state: 'visible', timeout: 10000 });

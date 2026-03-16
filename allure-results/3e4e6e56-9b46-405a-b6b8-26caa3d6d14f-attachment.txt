@@ -1,3 +1,0 @@
-❌ Failed to navigate to product:
-productName: ZARA COAT 3
-Error: locator.waitFor: Target page, context or browser has been closed
